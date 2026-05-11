@@ -9,7 +9,7 @@ from pathlib import Path
 # 页面设置
 @st.cache_resource
 def get_ai_client():
-    api_key = os.getenv("DEEPSEEK_API_KEY")
+    api_key = st.secrets.get("DEEPSEEK_API_KEY") or os.getenv("DEEPSEEK_API_KEY")
     if not api_key:
         return None
 
@@ -169,7 +169,7 @@ st.markdown("""
         <div class="xhs-logo">小红书</div>
         <div>
             <div class="xhs-title">RedFlag 文本风险自检器</div>
-            <<div class="xhs-subtitle">
+            <div class="xhs-subtitle">
 像发布小红书笔记一样，先检查表达风险、逻辑冲突和修改建议；
 支持单条深度体检，也支持批量笔记一键扫风险。
 </div>
@@ -353,7 +353,7 @@ def generate_publish_advice_with_ai(user_text, matches):
 """
 
         response = client.chat.completions.create(
-            model="deepseek-chat",
+            model="deepseek-v4-flash",
             messages=[
                 {"role": "system", "content": "你是一名擅长中文内容风控判断的助手。"},
                 {"role": "user", "content": prompt}
@@ -393,7 +393,7 @@ def rewrite_text_with_ai(user_text, matches):
 """
 
             response = client.chat.completions.create(
-                model="deepseek-chat",
+                model="deepseek-v4-flash",
                 messages=[
                     {"role": "system", "content": "你是一名擅长中文内容风控优化的助手。"},
                     {"role": "user", "content": prompt}
